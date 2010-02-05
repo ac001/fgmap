@@ -25,8 +25,47 @@ my($output) = "";
 my($l);
 my(%ocs);
 
+#################################
+# JSON output, for FGMap
+
+my($JSON_HEADER) = <<JSON;
+Pragma: no-cache
+Cache-Control: no-cache
+Expires: Sat, 17 Sep 1977 00:00:00 GMT
+Content-Type: text/plain
+
+JSON
+
+sub do_json_header
+{
+    my($cnt) = @_;
+    return ${JSON_HEADER}."{count: ${cnt}, success: true, pilots: [\n";
+}
+
+# IE may complain about trailing slash in output
+sub do_json_single
+{
+    my($callsign, $server_ip, $model, $lat, $lon, $alt, $head, $pitch, $roll) =
+        @_;
+    return <<JSON;
+    {callsign:"${callsign}", server_ip:"${server_ip}", model:"${model}", lat:${lat}, lng:${lon}, alt:${alt}, heading:${head}, pitch:${pitch}, roll:${roll} },
+JSON
+}
+
+sub do_json_tail
+{
+    return "]}\n\n";
+}
+
+my(%json_output) =
+(
+    'header' => \&do_json_header,
+    'single' => \&do_json_single,
+    'tail' => \&do_json_tail,
+);
 
 
+#################################
 # XML output, for FGMap
 
 my($XML_HEADER) = <<XML;
@@ -40,7 +79,7 @@ XML
 sub do_xml_header
 {
     my($cnt) = @_;
-    return ${XML_HEADER}."<fg_server pilot_cnt=\"${cnt}\">\n";
+    return ${XML_HEADER}."<?xml version='1.0' encoding='UTF-8'?><fg_server pilot_cnt=\"${cnt}\">\n";
 }
 
 sub do_xml_single
@@ -65,7 +104,8 @@ my(%xml_output) =
 );
 
 
-######
+#################################
+# KML output, for FGMap
 
 my($KML_HEADER) = <<KML;
 Pragma: no-cache
@@ -311,7 +351,7 @@ sub escape_strs
 }
 
 
-
+###########################################################
 # Main starts here
 
 
@@ -345,6 +385,7 @@ if($port <= 0 || $port >= 65536)
 }
 
 
+## TODO send json
 if($0 =~ m/fg_server_kml.cgi$/)
 {
     if($in_callsigns =~ m/^callsigns=(.*)$/)
