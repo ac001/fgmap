@@ -1,10 +1,19 @@
 
 Ext.onReady(function(){
 
-//var pilotRecord = new Ext.data.Record.create([
 
-//]);
 
+var latLabel = new Ext.Toolbar.TextItem({text:'Lat: 80.23'});
+var lngLabel = new Ext.Toolbar.TextItem({text:'Lng: -000.23'});
+
+var pilotsSummaryCountLabel = new Ext.Toolbar.TextItem({text:'No pilots'});
+var pilotsDataCountLabel = new Ext.Toolbar.TextItem({text:'No pilots'});
+
+
+//* list of pilot markers (atmo there is no ID etc in api3)
+var pilotMarkers = {};
+
+//* Pilots Datastore
 var pilotsStore = new Ext.data.JsonStore({
 	url: "etc/json_proxy.php",
 	baseParams: {fetch: 'pilots'},
@@ -27,8 +36,37 @@ pilotsStore.on("exception", function(prx, typ, act){
 	//TODO
 	console.log("exception", prx, typ, act);
 });
+
+///*** Load event and pilot markers
 pilotsStore.on("load", function(){
-	console.log("loaded", pilotsStore.getTotalCount());
+	//* update count labels
+	var cnt = pilotsStore.getTotalCount();
+	if(cnt == 0){
+		pilotsSummaryCountLabel.setText("No Pilots Online")
+		pilotsDataCountLabel.setText("No Pilots Online")
+	}else{
+		pilotsSummaryCountLabel.setText(cnt + " Pilots Online")
+		pilotsDataCountLabel.setText(cnt + " Pilots Online")
+	}
+	//* iterate through pilots and add or update markets
+	for(var idx=0; idx < pilotsStore.getTotalCount(); idx++){
+		var rec = pilotsStore.getAt(idx);
+		var callsign = rec.get('callsign');
+		var latlng = new google.maps.LatLng(rec.get('lat'),rec.get('lng'));
+
+		if(pilotMarkers[callsign]){ // marker exists so update
+			pilotMarkers[callsign].setPosition(latlng);
+
+		}else{ // create a new marker
+			pilotMarkers[callsign] = new google.maps.Marker({
+				position: latlng, 
+				map: fgMap, 
+				title: callsign
+			}); 
+		}
+		//console.log(rec);
+		//return;
+	}
 });
     
 // NOTE: This is an example showing simple state management. During development,
@@ -38,6 +76,7 @@ pilotsStore.on("load", function(){
 //TODO - sense LOCAL_DEV env
 // uncommnet below for production 
 //Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+
         
 var viewport = new Ext.Viewport({
 	layout: 'border',
@@ -81,7 +120,7 @@ var viewport = new Ext.Viewport({
 									{header: 'Aircraft',  dataIndex:'model', sortable: true}
 						],
 						listeners: {},
-						bbar: []
+						bbar: [pilotsSummaryCountLabel]
 					}),
 					//**** Navigation Widget
 					{
@@ -101,12 +140,15 @@ var viewport = new Ext.Viewport({
                 region: 'center', // a center region is ALWAYS required for border layout
                 deferredRender: false,
                 activeTab: 0, 
-                items: [{
-                    contentEl: 'map_canvas',
-                    title: 'Map&nbsp;&nbsp;',
-					iconCls: 'iconMap',
-                    autoScroll: true
-                }, 
+                items: [
+					new Ext.Panel(
+					{
+						contentEl: 'map_canvas',
+						title: 'Map&nbsp;&nbsp;',
+						iconCls: 'iconMap',
+						tbar: [ '->', latLabel, lngLabel],
+						autoScroll: true
+					}),
 					//***************************************************
 					//**** Pilots Main Grid
 					new Ext.grid.GridPanel({
@@ -168,12 +210,12 @@ var viewport = new Ext.Viewport({
 
 						],
 						listeners: {},
-						bbar: []
+						bbar: [pilotsDataCountLabel]
 					}),
 				//** Server Status
 				{
                     contentEl: 'center2',
-                    title: 'Server Status',
+                    title: 'Servers Status',
 					iconCls: 'iconServerStatus',
                     autoScroll: true
                 }
@@ -181,7 +223,7 @@ var viewport = new Ext.Viewport({
             })]
         });
 
-pilotsStore.load();
+//pilotsStore.load();
 map_initialize();
 
 }); /* Ext.onready() */
