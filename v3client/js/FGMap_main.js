@@ -100,7 +100,7 @@ var viewport = new Ext.Viewport({
             new Ext.TabPanel({
                 region: 'center', // a center region is ALWAYS required for border layout
                 deferredRender: false,
-                activeTab: 2, 
+                activeTab: 0, 
                 items: [{
                     contentEl: 'map_canvas',
                     title: 'Map&nbsp;&nbsp;',
