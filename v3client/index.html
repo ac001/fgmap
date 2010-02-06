@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1;">
+<title>FlightGear Map</title>
+
+<!--<link rel="SHORTCUT ICON" href="images/favicon.png">-->
+
+
+<link rel="stylesheet" type="text/css" href="js/ext-3.1.0/resources/css/ext-all.css">
+<!--<link rel="stylesheet" type="text/css" href="js/ext-3.1.0/resources/css/xtheme-gray.css">-->
+<script type="text/javascript" src="js/ext-3.1.0/adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="js/ext-3.1.0/ext-all-debug.js"></script>
+<!--<script type="text/javascript" src="js/ext-3.1.0/ext-all.js"></script>-->
+
+
+
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+  function map_initialize() {
+    var latlng = new google.maps.LatLng(37.613545, -122.357237); // KSFO
+    var myOptions = {
+      zoom: 14,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.TERRAIN
+    };
+    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  }
+
+</script>
+
+
+<script type="text/javascript" src="js/FG_PilotsGrid.js"></script>
+
+    <style type="text/css"> 
+    html, body {
+        font:normal 12px verdana;
+        margin:0;
+        padding:0;
+        border:0 none;
+        overflow:hidden;
+        height:100%;
+    }
+    p {
+        margin:5px;
+    }
+    .settings {
+        background-image:url(../shared/icons/fam/folder_wrench.png);
+    }
+    .nav {
+        background-image:url(../shared/icons/fam/folder_go.png);
+    }
+    </style> 
+ 
+
+  
+    <script type="text/javascript"  src="js/FGMap_main.js"></script> 
+</head> 
+<body> 
+    <!-- use class="x-hide-display" to prevent a brief flicker of the content --> 
+    <div id="west" class="x-hide-display"> 
+        <p>Hi. I'm the west panel.</p> 
+    </div> 
+    <div id="center2" sssclass="x-hide-display" style="width: 100%; height: 100%;"> 
+        <iframe src="http://mpmap01.flightgear.org/mpstatus/" style="width: 100%; height: 100%;"></iframe>
+    </div> 
+    <div id="map_canvas" ssclass="x-hide-display" style="width: 100%; height: 100%;"> 
+    </div> 
+    <div id="props-panel" sssclass="x-hide-display" style="width:200px;height:200px;overflow:hidden;"> 
+    </div> 
+    <!--<div id="south" class="x-hide-display"> 
+        <p>south - generally for informational stuff, also could be for status bar</p> 
+    </div>  -->
+</body> 
+</html>
