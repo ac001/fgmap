@@ -23,6 +23,7 @@
 	var fgMap = null;
 
   function map_initialize() {
+	//return
     var latlng = new google.maps.LatLng(37.613545, -122.357237); // KSFO
     var myOptions = {
       zoom: 12,
@@ -72,7 +73,7 @@
         <p>Hi. I'm the west panel.</p> 
     </div> 
     <div id="center2" sssclass="x-hide-display" style="width: 100%; height: 100%;"> 
-        <iframe src="http://mpmap01.flightgear.org/mpstatus/" style="width: 100%; height: 100%;"></iframe>
+        <iframe id="mp-status-iframe" style="width: 100%; height: 100%;"></iframe>
     </div> 
     <div id="map_canvas" ssclass="x-hide-display" style="width: 100%; height: 100%;"> 
     </div> 

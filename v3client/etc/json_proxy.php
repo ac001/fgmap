@@ -10,6 +10,8 @@ $payload['success'] = true; //* Extjs needs this to be true, else client side ex
 $payload['fetch'] = $fetch;
 //echo "fetch=$fetch";
 
+
+
 switch($fetch){
 
 	case 'pilots':
@@ -27,7 +29,7 @@ switch($fetch){
 			foreach($fields as $field){
 				$pilot[$field] = $xml_marker_node->getAttribute($field);
 			}
-			$pilots[] = $pilot;
+			$pilots[$xml_marker_node->getAttribute('callsign')] = $pilot;
 		}
 
 		$payload['count'] = count($pilots);

@@ -1,0 +1,5 @@
+<??
+
+header('Location: index.html');
+
+?>
