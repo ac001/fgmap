@@ -30,7 +30,7 @@
       mapTypeId: google.maps.MapTypeId.TERRAIN
     };
     fgMap = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-	google.maps.event.addDomListener(fgMap, 'mousemove', function(latlng) {
+	google.maps.event.addDomListener(fgMap, 'idle', function(latlng) {
 		//FIXME - wtf this doent exist as event
 		console.log("mousemove", latlng);
 	});

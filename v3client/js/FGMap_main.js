@@ -3,8 +3,8 @@ Ext.onReady(function(){
 
 
 
-var latLabel = new Ext.Toolbar.TextItem({text:'Lat: 80.23'});
-var lngLabel = new Ext.Toolbar.TextItem({text:'Lng: -000.23'});
+var latLabel = new Ext.Toolbar.TextItem({text:'Lat: -0.00'});
+var lngLabel = new Ext.Toolbar.TextItem({text:'Lng: -0.00'});
 
 var pilotsSummaryCountLabel = new Ext.Toolbar.TextItem({text:'No pilots'});
 var pilotsDataCountLabel = new Ext.Toolbar.TextItem({text:'No pilots'});
@@ -61,7 +61,8 @@ pilotsStore.on("load", function(){
 			pilotMarkers[callsign] = new google.maps.Marker({
 				position: latlng, 
 				map: fgMap, 
-				title: callsign
+				title: callsign,
+				icon: '../images/aircraft_icons/aircraft_dot.png'
 			}); 
 		}
 		//console.log(rec);
@@ -146,7 +147,10 @@ var viewport = new Ext.Viewport({
 						contentEl: 'map_canvas',
 						title: 'Map&nbsp;&nbsp;',
 						iconCls: 'iconMap',
-						tbar: [ '->', latLabel, lngLabel],
+						tbar: [ {text: 'VOR', iconCls: 'iconVor'}, {text: 'ADF', iconCls: 'iconAdf'},
+								'->', latLabel, lngLabel
+
+						],
 						autoScroll: true
 					}),
 					//***************************************************
