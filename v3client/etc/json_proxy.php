@@ -7,6 +7,7 @@ $fetch = isset($_REQUEST['fetch']) ? $_REQUEST['fetch'] : null;
 header('Content-type: text/plain');
 $payload = array();
 $payload['success'] = true; //* Extjs needs this to be true, else client side exception
+$payload['fetch'] = $fetch;
 //echo "fetch=$fetch";
 
 switch($fetch){

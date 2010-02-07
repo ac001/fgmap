@@ -1,8 +1,44 @@
+var FG = {};
+FG.map = {};
+FG.pilots_list = {};
+
+console.log(FG);
+
+function load_pilots(){
+	console.log("AJAX");
+	Ext.Ajax.request({
+		url: "etc/json_proxy.php",
+		params: {fetch: 'pilots'},
+		method: 'GET',
+		success: function(resp, opts){
+			//console.log("ok", resp);
+			var json = Ext.decode(resp.responseText);
+			//console.log("ok-pilots", resp);
+			pilots = json['pilots'];
+			for( p in pilots){
+				console.log(p, pilots[p]);
+					
+
+			}
+		},
+		failure: function(resp, opts){
+			//TODO error handler
+			console.log("fail");
+		}
+	});
+}
+
+
 
 Ext.onReady(function(){
 
+//****************************************************************
+//** Fetch
 
 
+
+
+//****************************************************************
 var latLabel = new Ext.Toolbar.TextItem({text:'Lat: -0.00'});
 var lngLabel = new Ext.Toolbar.TextItem({text:'Lng: -0.00'});
 
@@ -84,7 +120,7 @@ var viewport = new Ext.Viewport({
 	plain: true,
 	items: [
 		//** Left/West area
-		{title: 'Flight Gear Map', region: 'west',
+		{title: 'FlightGear Map <small>v0.1-experimental</small>', region: 'west',
 			split: true,
 			width: 300,
 			minSize: 175,
@@ -108,7 +144,8 @@ var viewport = new Ext.Viewport({
 								'->',
 								//Geo2.widgets.goto_www('Online', 'View rates on website', '/rates.php'),
 								{text: 'Refresh', iconCls: 'iconRefresh', handler: function(){
-									pilotsStore.reload();
+									//pilotsStore.reload();
+									load_pilots();
 									}
 								}    
 						],
@@ -140,7 +177,8 @@ var viewport = new Ext.Viewport({
             new Ext.TabPanel({
                 region: 'center', // a center region is ALWAYS required for border layout
                 deferredRender: false,
-                activeTab: 0, 
+                activeTab: 0,
+				border: 0,
                 items: [
 					new Ext.Panel(
 					{
@@ -165,7 +203,7 @@ var viewport = new Ext.Viewport({
 								'->',
 								//Geo2.widgets.goto_www('Online', 'View rates on website', '/rates.php'),
 								{text: 'Refresh', iconCls: 'iconRefresh', handler: function(){
-									pilotsStore.reload();
+									load_pilots();
 									}
 								}    
 						],
@@ -227,7 +265,7 @@ var viewport = new Ext.Viewport({
             })]
         });
 
-//pilotsStore.load();
+
 map_initialize();
 
 }); /* Ext.onready() */
