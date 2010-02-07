@@ -269,10 +269,9 @@ var viewport = new Ext.Viewport({
 					//**** Navigation Widget
 					{
 					title: 'Navigation',
-					iconCls: 'iconNavigation',
+					iconCls: 'iconNav',
 					html: '<p>Some settings in here.</p>',
-					border: false,
-					iconCls: 'settings'
+					border: false
 					}
 				]
 			   }) // end tabpanel
