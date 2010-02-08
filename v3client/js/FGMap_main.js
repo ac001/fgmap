@@ -57,6 +57,17 @@ var pilotsDataCountLabel = new Ext.Toolbar.TextItem({text:'No pilots'});
 var refreshTimerLabel = new Ext.Toolbar.TextItem({text:'-'});
 
 
+var mapToolBarItems = new Array();
+var ranges = [{zoom: 4, caption: '10km'},{zoom: 9, caption: '20km'},  {zoom: 11, caption: '100km'}];
+for(var r in ranges){
+	mapToolBarItems.push({text: ranges[r].caption, gr_zoom: ranges[r].zoom});
+}
+mapToolBarItems.push({text: 'VOR', iconCls: 'iconVor'});
+mapToolBarItems.push({text: 'ADF', iconCls: 'iconAdf'});
+mapToolBarItems.push(latLabel);
+mapToolBarItems.push(lngLabel);
+
+
 var PilotRecord = Ext.data.Record.create([
 	{name: 'flag', type: 'int'},
 	{name: "callsign", type: 'string'},
@@ -98,10 +109,6 @@ pilotsStore.on("exception", function(prx, typ, act){
 
     
 
-
-
-
-
 function load_pilots(){
 	//console.log(refresh_counter);
 	if(refresh_counter > 0){
@@ -111,7 +118,7 @@ function load_pilots(){
 		return
 	}
 	refreshTimerLabel.setText('loading')
-	console.log("AJAX pilots request -------------------------------------");
+	//console.log("AJAX pilots request -------------------------------------");
 	Ext.Ajax.request({
 		url: "etc/json_proxy.php",
 		params: {fetch: 'pilots'},
@@ -137,6 +144,8 @@ function load_pilots(){
 							rec.set('lng', pilots[rec.id].lng);
 							rec.set('alt', pilots[rec.id].alt);
 							rec.set('heading', pilots[rec.id].heading);
+							rec.set('pitch', pilots[rec.id].pitch);
+							rec.set('roll', pilots[rec.id].roll);
 							delete pilots[rec.id]
 						}else{
 							var f = rec.get('flag');
@@ -192,7 +201,8 @@ function load_pilots(){
 
 }
 
-var pilotsSelectionModel = new Ext.grid.CheckboxSelectionModel({singleSelect:false});
+//LATER
+//var pilotsSelectionModel = new Ext.grid.CheckboxSelectionModel({singleSelect:false});
 
 // NOTE: This is an example showing simple state management. During development,
 // it is generally best to disable state management as dynamically-generated ids
@@ -241,8 +251,8 @@ var viewport = new Ext.Viewport({
 						//sm: this.selModel,
 						store: pilotsStore,
 						loadMask: true,
-						sm: pilotsSelectionModel,
-						columns: [  pilotsSelectionModel,
+						//TODO sm: pilotsSelectionModel,
+						columns: [  //TODO pilotsSelectionModel,
 									{header: 'CallSign',  dataIndex:'callsign', sortable: true, renderer: render_callsign},
 									{header: 'Aircraft',  dataIndex:'model', sortable: true}
 						],
@@ -274,10 +284,7 @@ var viewport = new Ext.Viewport({
 						contentEl: 'map_canvas',
 						title: 'Map&nbsp;&nbsp;',
 						iconCls: 'iconMap',
-						tbar: [ {text: 'VOR', iconCls: 'iconVor'}, {text: 'ADF', iconCls: 'iconAdf'},
-								'->', latLabel, lngLabel
-
-						],
+						tbar: mapToolBarItems,
 						autoScroll: true
 					}),
 					//***************************************************
@@ -287,15 +294,16 @@ var viewport = new Ext.Viewport({
 						iconCls: 'iconPilots',
 						autoScroll: true,
 						autoWidth: true,
-						tbar:[  //this.actionAdd, this.actionEdit, this.actionDelete, 
-								'-',// this.actionLabSelectToolbarButton,
-								'->',
+						//tbar:[  mapToolBarItems//this.actionAdd, this.actionEdit, this.actionDelete, 
+								//'-',// this.actionLabSelectToolbarButton,
+								//'->',
 								//Geo2.widgets.goto_www('Online', 'View rates on website', '/rates.php'),
-								{text: 'Refresh', iconCls: 'iconRefresh', handler: function(){
-									load_pilots();
-									}
-								}    
-						],
+							//	{text: 'Refresh', iconCls: 'iconRefresh', handler: function(){
+									//load_pilots();
+									//}
+								//}    
+						//],
+						tbar: mapToolBarItems,
 						viewConfig: {emptyText: 'No pilots online', forceFit: true}, 
 						//sm: this.selModel,
 						store: pilotsStore,
