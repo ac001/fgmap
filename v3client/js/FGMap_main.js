@@ -20,6 +20,29 @@ function render_callsign(v, meta, rec){
 	return v;
 }
 
+function render_altitude(v, meta, rec, rowIdx, colIdx, store){
+	if(v < 1000){
+		color = '#931429';
+	}else if(v < 2000){
+		color = '#FA405F';
+	}else if(v < 4000){
+		color = '#CCFA40';
+	}else if(v < 6000){
+		color = '#7FFA40';
+	}else if(v < 8000){
+		color = '#40FA6E';
+	}else if(v < 10000){
+		color = '#40FAAA';
+	}else if(v < 15000){
+		color = '#FA405F';
+	}else if(v < 20000){
+		color = '#40FAFA';
+	}else{
+		color = '#331CDC';
+	}
+	return "<span style='color:" + color + ';">' + Ext.util.Format.number(v, '0,000'); + '</span>';
+}
+
 
 //********************************************************************************************
 Ext.onReady(function(){
@@ -299,9 +322,7 @@ var viewport = new Ext.Viewport({
 								}
 							},
 							{header: 'Alt', dataIndex:'alt', sortable: true, align: 'right',
-								renderer: function(v, meta, rec, rowIdx, colIdx, store){
-									return Ext.util.Format.number(v, '0,000');
-								}
+								renderer: render_altitude
 							},
 							{header: 'Heading', dataIndex:'heading', sortable: true, align: 'right',
 								renderer: function(v, meta, rec, rowIdx, colIdx, store){
