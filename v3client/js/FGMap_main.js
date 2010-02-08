@@ -77,40 +77,7 @@ pilotsStore.on("exception", function(prx, typ, act){
 	console.log("exception", prx, typ, act);
 });
 
-///*** Load event and pilot markers
-pilotsStore.on("load", function(){
-	//* update count labels
-	var cnt = pilotsStore.getTotalCount();
-	if(cnt == 0){
-		pilotsSummaryCountLabel.setText("No Pilots Online")
-		pilotsDataCountLabel.setText("No Pilots Online")
-	}else{
-		pilotsSummaryCountLabel.setText(cnt + " Pilots Online")
-		pilotsDataCountLabel.setText(cnt + " Pilots Online")
-	}
-	//* iterate through pilots and add or update markets
-	for(var idx=0; idx < pilotsStore.getTotalCount(); idx++){
-		var rec = pilotsStore.getAt(idx);
-		var callsign = rec.get('callsign');
-		var latlng = new google.maps.LatLng(rec.get('lat'),rec.get('lng'));
 
-
-
-		if(pilotMarkers[callsign]){ // marker exists so update
-			pilotMarkers[callsign].setPosition(latlng);
-
-		}else{ // create a new marker
-			pilotMarkers[callsign] = new google.maps.Marker({
-				position: latlng, 
-				map: fgMap, 
-				title: callsign,
-				icon: '../images/aircraft_icons/aircraft_dot.png'
-			}); 
-		}
-		//console.log(rec);
-		//return;
-	}
-});
     
 
 
@@ -374,6 +341,6 @@ var viewport = new Ext.Viewport({
 
 
 map_initialize();
-
+load_pilots();
 }); /* Ext.onready() */
 

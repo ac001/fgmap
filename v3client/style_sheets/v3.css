@@ -21,6 +21,7 @@
 /*============================================*/
 .fg_pilot_dead{
 	border-left: 5px solid red;
+	
 }
 .fg_pilot_new{
 	border-left: 5px solid orange;
