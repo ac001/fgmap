@@ -77,11 +77,6 @@ var pilotMarkers = {};
 
 //* Pilots Datastore
 var pilotsStore = new Ext.data.Store({
-	//url: "etc/json_proxy.php",
-	//baseParams: {fetch: 'pilots'},
-	//method: 'GET',
-	//id: "callsign",
-	//root: "pilots",
 	fields: [ 	{name: 'flag', type: 'int'},
 				{name: "callsign", type: 'string'},
 				{name: "server_ip", type: 'string'},
@@ -126,13 +121,7 @@ function load_pilots(){
 			var json = Ext.decode(resp.responseText);
 			//console.log("ok-pilots", resp);
 			var pilots =  json['pilots'];
-
-			//* First loop to create an object key by callsign
-			//var lookup = {}
-			//for( p in pilots){
-			//	lookup[pilots[p].callsign] = pilots[p];
-			//}
-			
+		
 			//* loop thru existing pilots and update
 			if(pilotsStore.getCount() > 0){
 				//for(var idx=0; idx <= pilotsStore.getCount(); idx++){
@@ -144,6 +133,10 @@ function load_pilots(){
 						if(pilots[rec.id]){
 							//* Pilot exists so update
 							rec.set('flag', 0);
+							rec.set('lat', pilots[rec.id].lat);
+							rec.set('lng', pilots[rec.id].lng);
+							rec.set('alt', pilots[rec.id].alt);
+							rec.set('heading', pilots[rec.id].heading);
 							delete pilots[rec.id]
 						}else{
 							var f = rec.get('flag');
